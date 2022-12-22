@@ -1,32 +1,29 @@
 from random import randint
 
 
+def explanation():
+    print("Explicação do fluxo do código:\nO algoritmo seque uma busca A* utilizando uma heuristica baseada na distancia de Manhattan. Sua função de custo é calculada por F(n) = g(n) + h(n), sendo g(n) o custo acumulado de h(n) do estado inicial até o estado atual e h(n) o custo da heuristica avaliado de acordo com os cubos de canto e sua distancia para as posições de origem, classificando seus valores de heuristica como 0 quando estão ná posição objetivo e 1 ou 2 quando estão em determinadas posições do cubo.\nO Código segue um determinado fluxo. Iniciando a busca A* pela raiz (estado embaralhado), ele verifica constantemente se alcançou o objetivo e se ainda existem elementos a serem explorados na fronteira. Com isso ele passa a gerar nós sucessores que correspondem aos 18 movimentos possíveis realizados pelo cubo, sendo capaz de rotacionar qualquer uma das 6 faces em até três graus diferentes.\nOs nós sucessores são armazenados na lista fronteira que se manter ordenada de forma crescente em relação aos custo F(n) dos estados contidos nela. Os nós aprofundados são sempre retirados do inicio da fronteira, os quais também são armazenados na lista caminho que é impressa ao se encontrar a solução.\n\n Autores:\nRodrigo Matos Peixoto")
 
-def explicação():
-    print("Explicação do fluxo do código:\nO algoritmo seque uma busca A* utilizando uma heuristica baseada na distancia de Manhattan. Sua função de custo é calculada por F(n) = g(n) + h(n), sendo g(n) o custo acumulado de h(n) do estado inicial até o estado atual e h(n) o custo da heuristica avaliado de acordo com os cubos de canto e sua distancia para as posições de origem, classificando seus valores de heuristica como 0 quando estão ná posição objetivo e 1 ou 2 quando estão em determinadas posições do cubo.\nO Código segue um determinado fluxo. Iniciando a busca A* pela raiz (estado embaralhado), ele verifica constantemente se alcançou o objetivo e se ainda existem elementos a serem explorados na fronteira. Com isso ele passa a gerar nós sucessores que correspondem aos 18 movimentos possíveis realizados pelo cubo, sendo capaz de rotacionar qualquer uma das 6 faces em até três graus diferentes.\nOs nós sucessores são armazenados na lista fronteira que se manter ordenada de forma crescente em relação aos custo F(n) dos estados contidos nela. Os nós aprofundados são sempre retirados do inicio da fronteira, os quais também são armazenados na lista caminho que é impressa ao se encontrar a solução.\n\n Autores:\nRodrigo Matos Peixoto\n Bruno Santos Junqueira")
 
-
-#Função que leva o estado passado para o estado solucionado
-def resetar(estado):
-    #Cada face é constituida por uma string indicando o estado de cada cubie/peça
+#Reset the cube to the initial state
+def reset(state):
+    #Each face is a string indicating each cubie/piece
     f = "F1F2F3F4F5F6F7F8F9"
     a = "A1A2A3A4A5A6A7A8A9"
     d = "D1D2D3D4D5D6D7D8D9"
     e = "E1E2E3E4E5E6E7E8E9"
     c = "C1C2C3C4C5C6C7C8C9"
     b = "B1B2B3B4B5B6B7B8B9"
-    gn = 0 #Armagena o custo g da raiz até o objetivo
-    fn = 0 #Armazena o custo total da heuristica para este estado
-    estado.append(f)
-    estado.append(a)
-    estado.append(d)
-    estado.append(e)
-    estado.append(c)
-    estado.append(b)
-    estado.append(gn)
-    estado.append(fn)
-
-
+    gn = 0 #Stores the cost g from root until the objective
+    fn = 0 #Stores the total cost of the heuristic for the actual state
+    state.append(f)
+    state.append(a)
+    state.append(d)
+    state.append(e)
+    state.append(c)
+    state.append(b)
+    state.append(gn)
+    state.append(fn)
 
 
 #Recebe o estado do cubo e o exibe
@@ -148,6 +145,7 @@ def display(estado):
         print()
         c = y
     print()
+
 
 #Realiza as ações de rotação passando-se um estado, face e angulo.
 def rotacionar(estado, face, angulo):
@@ -413,6 +411,7 @@ def rotacionar(estado, face, angulo):
     novo_estado.append(f)
     return novo_estado
 
+
 #Recebe o proximo estado (um vetor com strings) e realiza o calculo da heuristica retornando o f(n)
 def heuristica(estado, estado_objetivo):
     hValor = 0 #h(n)
@@ -466,6 +465,7 @@ def heuristica(estado, estado_objetivo):
     
     return estado[7]
 
+
 #Retorna um boleano informando se o objetivo foi alcançado ou não 
 def objetivoAlcancado(estado,estado_objetivo):
     for x in range(0,6): #Acessa a face
@@ -473,6 +473,7 @@ def objetivoAlcancado(estado,estado_objetivo):
             if estado[x][y] + estado[x][y+1] != estado_objetivo[x][y] + estado_objetivo[x][y+1]:
                 return False
     return True
+
 
 #A busca recebe um estado inicial embaralhado e atua com um looping buscando através da arvore até alcançar o objetivo ou não possuir mais nós fronteira a serem abertos
 def buscaAEstrela(estado_inicial, estado_objetivo):
@@ -493,6 +494,7 @@ def buscaAEstrela(estado_inicial, estado_objetivo):
     if len(fronteira) == 0  and not objetivo(estado_atual, estado_objetivo):
         print("A solução não foi encontrada")
 
+
 #Retorna o melhor nó, ou seja, o primeiro da lista fronteira, fazendo as devidas atualizações nela e verificando se o objetivo foi alcançado
 def selecionaNo(estado_atual, estado_objetivo, caminho, fronteira):
     estado_atual = fronteira[0] #Seleciona o primeiro nó da fronteira (o de menor custo f(n))
@@ -503,6 +505,7 @@ def selecionaNo(estado_atual, estado_objetivo, caminho, fronteira):
     fronteira.pop(0) #Remove o primeiro nó da lista fronteiro pois ele será explorado agora 
     return estado_atual #Retorna o nó escolhido
 
+
 #Recebe um estado, o estado objetivo e a lista fronteira gerando seus 18 sucessores
 #Faz o calculo da heuristica de cada um dos estados e os insere na fronteira
 def gerarSucessores(estado, estado_objetivo, fronteira):
@@ -510,7 +513,7 @@ def gerarSucessores(estado, estado_objetivo, fronteira):
     for x in range(0,6):
         #Itera valores de 6 a 9 para acessar os graus
         for y in range(6,9):
-            novo_estado = rotacionar(estado, movimentar(x),movimentar(y))
+            novo_estado = rotacionar(estado, movement(x),movement(y))
             h = heuristica(novo_estado, estado_objetivo)
             if(len(fronteira) == 0):
                 fronteira.append(novo_estado)
@@ -524,59 +527,66 @@ def gerarSucessores(estado, estado_objetivo, fronteira):
                         fronteira.append(novo_estado)
                         break
 
-#Recebe um valor e retorna a movimentação definida para ele
-def movimentar(num):
-    if(num == 0):
+
+#Receive a value and returns the correspondent move
+def movement(num):
+    if(num == 0): #Front's cube
         return "F"
-    elif(num == 1):
+    elif(num == 1): #Back's cube
         return "A"
-    elif(num == 2):
+    elif(num == 2): #Right's cube
         return "D"
-    elif(num == 3):
+    elif(num == 3): #Left's cube
         return "E"
-    elif(num == 4):
+    elif(num == 4): #Up's cube
         return "C"
-    elif(num == 5):
+    elif(num == 5): #Down's cube
         return "B"
-    elif(num == 6):
+    elif(num == 6): #Rotate 90 degrees
         return 90
-    elif(num == 7):
+    elif(num == 7): #Rotate 180 degrees
         return 180
-    elif(num == 8):
+    elif(num == 8): #Rotate 270 degrees
         return 270
     else:
-        print(f"O numero {num} não é valido")
+        print(f"The number {num} isn't")
 
-#Recebe um estado e retorna ele embaralhado X numero de vezes
-def embaralhar(estado, num):
-    for x in range(0, num):
-        x = randint(0,5) #Escolhe a face de forma randomica
-        y = randint(6,8) #Escolhe o angulo de rotação de forma randomica
-        estado = rotacionar(estado, movimentar(x), movimentar(y))
-        print(f"Rotacionando {movimentar(x)} {movimentar(y)} graus")
-    return estado
+
+#Takes a state and returns him shaked X number times
+def embaralhar(state, number):
+    for move in range(0, number):
+        face = randint(0,5) #Chose a face randomly
+        angle = randint(6,8) #Chose an angle randomly
+        state = rotacionar(state, movement(face), movement(angle))
+        print(f"{move}. Rotating {movement(face)} {movement(angle)} degrees")
+    return state
+
 
 def main():
-    print("Olá, Bem vindo ao algoritmo de resolução do Cubo Mágico!")
-    print()
-    explicação()
-    print()
-    print("Esse será o formato no qual visualizaremos o cubo:")
-    #instancia um estado inicial e o imprime
+    print("Hello, Welcome to the magic cube resolution!\n")
+    explanation()
+    print("This will be the visualization fomat of the cube:")
+    #Create a initial state reseted and print this
     estado_objetivo = []
-    resetar(estado_objetivo)
+    reset(estado_objetivo)
     display(estado_objetivo)
     while True:
         while True:
-            print("Você pode informar a quantidade de rotações que deseja para embaralhar o cubo ou embaralha-lo manualmente.")
-            x = int(input("Qual você prefere? \n 1. Embaralhar automaticamente \n 2. Embaralhar Manualmente \n"))
-            if x == 1:
-                y = int(input("Informe quantas rotações aleatórias você deseja: "))
-                estado_embaralhado = embaralhar(estado_objetivo, y)
-                print("A configuração do estado embaralhado é essa:")
+            print("You can shake the cube randomly or select specifiv moves, please chose one.")
+            answer = int(input("What do you prefer? \n 1. Shake Randomly \n 2. Shake manualy \n"))
+            if answer == 1: #If randomly will be neededd to inform the number of movements
+                rotations = 0
+                while rotations <= 0:
+                    rotations = int(input("How many rotations do you want?:\n"))
+                    if rotations <= 0:
+                        print("Please, give a positive number!")
+                estado_embaralhado = embaralhar(estado_objetivo, rotations)
+                print(f"Here is the cube state after the {rotations} movements:")
                 display(estado_embaralhado) #Imprime o estado embaralhado
+                input()
+                #Note: Insert a sleep point to shows the result to user
                 break
-            elif x == 2:
+            elif answer == 2:
                 f = str(input("Informe a face ( Frente, Atras, Direita, Esquerda, Cima, Baixo): ")).upper()[0]
                 g = int(input("Informe e o grau de rotação (90, 180, 270): "))
                 estado_embaralhado = rotacionar(estado_objetivo, f, g)
@@ -598,4 +608,6 @@ def main():
         if str(input("Gostaria de tentar novamente?\n")).upper()[0] == "N":
             break
         print("\n\n\n")
+
+
 main()
